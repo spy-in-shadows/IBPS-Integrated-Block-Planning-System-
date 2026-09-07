@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  --bg-app: #f3f6fa;
+  --bg-inverse: #10243d;
+  --ink: #172338;
+  --ink-secondary: #5d6b7e;
+  --ink-muted: #8b98a8;
+  --rule-default: #dbe3ed;
+  --rule-strong: #b8c5d3;
+  --accent: #d86132;
+  --accent-tint: #fff0e9;
+  --navy: #10243d;
+  --navy-soft: #183552;
+  --blue: #2b6fe8;
+  --blue-tint: #eaf1ff;
+  --mint: #1f9d78;
+  --mint-tint: #e6f6f0;
+  --amber: #c9891c;
+  --amber-tint: #fff6dc;
+
+  /* Legacy alias mappings for component compatibility */
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #f7f9fc;
+  --border-default: #dbe3ed;
+  --border-strong: #b8c5d3;
+  --text-primary: #172338;
+  --text-secondary: #5d6b7e;
+  --text-muted: #8b98a8;
+  --accent-primary: #2b6fe8;
+  --status-success: #1f9d78;
+  --status-warning: #c9891c;
+  --status-danger: #d86132;
+  --status-info: #2b6fe8;
+}
+
+/* Global Zero Radius & Zero Shadow Enforcement */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--bg-app);
+  color: var(--ink);
+  font-family: 'Avenir Next', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-app); }
+::-webkit-scrollbar-thumb { background: var(--rule-default); }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-secondary); }
+
+/* Table Base Styles — Swiss Grid Anchor */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule-default);
+  white-space: nowrap;
+  background: #f7f9fc;
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule-default);
+  color: var(--ink);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+tr:hover td { background: #f7faff; }
+
+/* Tabular Monospace font for data values */
+.mono {
+  font-family: 'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Alignment utilities */
+.text-right {
+  text-align: right;
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
