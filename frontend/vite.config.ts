@@ -8,14 +8,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    rollupOptions: {
-      output: {
-        // Use stable filenames without content hashes for Vercel static hosting
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name][extname]',
-      },
-    },
+    outDir: 'dist',
   },
   server: {
     port: 5173,
