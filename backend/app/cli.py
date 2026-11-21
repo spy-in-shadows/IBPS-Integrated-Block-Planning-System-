@@ -82,6 +82,12 @@ def main():
         print(f"  * Task '{td.task_id}' displaced to yield capacity for emergency work.")
     print("=" * 92)
 
+    if args.audit:
+        from app.services.diagnostic_service import DiagnosticService
+
+        print("\n[Solver Diagnostic Report]")
+        print(json.dumps(DiagnosticService.get_diagnostics().model_dump(), indent=2))
+
 
 if __name__ == "__main__":
     main()

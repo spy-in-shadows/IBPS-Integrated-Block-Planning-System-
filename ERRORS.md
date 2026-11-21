@@ -112,7 +112,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Your call.* Fixing it means swapping a dependency (`httpx` → `httpx2`). I recommend **no change for now**, since the tests work and this is only a deprecation notice.
 - **Verify:** N/A unless you approve the swap. Then the warning is gone and 35 tests pass.
 
-### 10. CLI `--audit` flag is accepted but does nothing
+### ✅ 10. CLI `--audit` flag is accepted but does nothing
+- **Status:** ✅ Fixed: `--audit` now prints `DiagnosticService.get_diagnostics()` as JSON after the run (output 25 → 92 lines).
 - **Severity:** bug
 - **Where:** `backend/app/cli.py:26` (flag defined); `args.audit` is never read. `README.md:201` documents it.
 - **Evidence:** `grep "args\." backend/app/cli.py` finds no matches. The flag's help text says "Print solver diagnostic report", but the output is the same with or without it.
