@@ -121,7 +121,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Your call:* (a) when `--audit` is set, print the existing `DiagnosticService` report (no new logic, just a call to existing code), or (b) remove the flag and drop `--audit` from the README.
 - **Verify:** (a) run with and without `--audit` and diff the output; (b) `--help` no longer lists it and the README matches.
 
-### 11. Running the CLI rewrites tracked data files
+### ✅ 11. Running the CLI rewrites tracked data files
+- **Status:** ✅ Fixed: CLI writes data/*.json only if missing or with new `--regenerate` flag; a default run leaves `git status` clean.
 - **Severity:** warning
 - **Where:** `backend/app/cli.py:35-36` → `backend/app/data/loader.py:24-67`
 - **Evidence:** `export_demo_fixture()` and `export_full_dataset()` run every time and overwrite `data/fixtures/demo_fixture.json` (with a new `created_at` timestamp) and `data/generated/full_dataset.json`. Both are tracked, so running the README's "CLI audit benchmark" leaves a dirty working tree. Nothing at runtime reads these files: `StateService` uses the generator directly.

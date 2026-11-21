@@ -13,7 +13,7 @@ if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
 from app.data.generator import get_demo_fixture_data
-from app.data.loader import export_demo_fixture, export_full_dataset
+from app.data.loader import export_demo_fixture, export_full_dataset, FIXTURE_PATH, GENERATED_PATH
 from app.scoring.priority_engine import PriorityEngine
 from app.optimization.baseline import BaselineScheduler
 from app.optimization.optimizer import BlockPlanOptimizer
@@ -24,6 +24,7 @@ from app.domain.enums import PlanHorizon
 def main():
     parser = argparse.ArgumentParser(description="IBPS CLI Optimizer & Audit Demo")
     parser.add_argument("--audit", action="store_true", help="Print solver diagnostic report")
+    parser.add_argument("--regenerate", action="store_true", help="Rewrite data/*.json even if they already exist")
     args = parser.parse_args()
 
     print("=" * 92)
@@ -32,8 +33,10 @@ def main():
     print("  [Badge: SYNTHETIC / DEMO DATA ONLY — ARCHITECTURAL PROTOTYPE]")
     print("=" * 92)
 
-    export_demo_fixture()
-    export_full_dataset()
+    if args.regenerate or not FIXTURE_PATH.exists():
+        export_demo_fixture()
+    if args.regenerate or not GENERATED_PATH.exists():
+        export_full_dataset()
     tasks, blocks, trains, goods, emergency_task = get_demo_fixture_data()
 
     print(f"[1/5] Loaded {len(tasks)} tasks, {len(blocks)} blocks, {len(trains)} trains.")
