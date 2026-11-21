@@ -14,7 +14,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Tests](https://img.shields.io/badge/Tests-35%20passing-brightgreen?style=flat-square)](tests/)
 
-**[Live Demo](https://frontend-seven-chi-40.vercel.app) · [API Docs](https://ibps-api-1d5z.onrender.com/docs) · [Health Check](https://ibps-api-1d5z.onrender.com/api/health)**
+**[Live Demo](https://ibps-railway-planner.vercel.app) · [API Docs](https://ibps-api-1d5z.onrender.com/docs) · [Health Check](https://ibps-api-1d5z.onrender.com/api/health)**
 
 </div>
 
@@ -36,7 +36,7 @@ The result: critical safety tasks frequently go unscheduled, track possessions o
 
 | Service | URL | Platform |
 |---|---|---|
-| **Frontend (React SPA)** | https://frontend-seven-chi-40.vercel.app | Vercel Edge CDN |
+| **Frontend (React SPA)** | https://ibps-railway-planner.vercel.app | Vercel Edge CDN |
 | **Backend API** | https://ibps-api-1d5z.onrender.com | Render (free web service) |
 | **Swagger API Docs** | https://ibps-api-1d5z.onrender.com/docs | FastAPI / OpenAPI |
 | **Health Check** | https://ibps-api-1d5z.onrender.com/api/health | — |
