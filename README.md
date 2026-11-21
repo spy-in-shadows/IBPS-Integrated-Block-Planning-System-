@@ -201,6 +201,13 @@ App available at **http://localhost:5173**
 .venv/bin/python backend/app/cli.py --audit
 ```
 
+The report generator in `tools/` needs one extra package that the API does not:
+
+```bash
+pip install -r requirements-tools.txt
+python tools/build_sih_project_report.py   # writes deliverables/*.docx
+```
+
 **22 unit tests** covering:
 
 - CP-SAT hard constraints (corridor isolation, crew capacity, precedence, safety incompatibility)

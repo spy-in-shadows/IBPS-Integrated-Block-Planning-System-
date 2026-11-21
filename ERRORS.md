@@ -41,7 +41,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Anchor these to the repo root: `build/`→`/build/`, `lib/`→`/lib/`, `lib64/`→`/lib64/`, `public/`→`/public/`. This keeps ignoring the stray root `public/` folder.
 - **Verify:** Re-run the same `git check-ignore` command and expect no matches for the frontend paths. Confirm root `public/` is still ignored and `git status` shows no newly untracked files.
 
-### 2. `tools/build_sih_project_report.py` cannot run: `python-docx` is not a declared dependency
+### ✅ 2. `tools/build_sih_project_report.py` cannot run: `python-docx` is not a declared dependency
+- **Status:** ✅ Fixed: Added `requirements-tools.txt` (python-docx) and a README note; script verified in a clean venv.
 - **Severity:** bug
 - **Where:** `tools/build_sih_project_report.py:4-10`, `requirements.txt`
 - **Evidence:** `ModuleNotFoundError: No module named 'docx'` in the project venv after a clean `pip install -r requirements.txt`.
