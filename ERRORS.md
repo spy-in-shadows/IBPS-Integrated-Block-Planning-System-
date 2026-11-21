@@ -77,7 +77,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Replace the "Frontend Configuration" block in the root `.env.example` with a one-line comment pointing to `frontend/.env.example`. Your local `.env` won't be touched.
 - **Verify:** Diff review, and confirm the `/api` fallback still appears in the build.
 
-### 6. `API_PREFIX` and `DEBUG` env vars are documented but have no effect
+### ✅ 6. `API_PREFIX` and `DEBUG` env vars are documented but have no effect
+- **Status:** ✅ Fixed: Removed DEBUG from both .env.example files and render.yaml; stopped documenting API_PREFIX as configurable (prefix stays hardcoded `/api`, no code change).
 - **Severity:** warning (dead config)
 - **Where:** `backend/app/core/config.py:28` (`api_prefix: str = "/api"` is hardcoded) and `:31` (`debug` is set but never read anywhere). Documented in `.env.example:8-9`, `backend/.env.example:6-7` and `render.yaml:13-14`.
 - **Evidence:** `grep` finds no `os.getenv("API_PREFIX")`. `server_settings.debug` has zero readers in `backend/`.
