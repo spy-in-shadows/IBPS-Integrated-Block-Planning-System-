@@ -14,7 +14,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Tests](https://img.shields.io/badge/Tests-35%20passing-brightgreen?style=flat-square)](tests/)
 
-**[Live Demo](https://frontend-seven-chi-40.vercel.app) · [API Docs](https://ibps-integrated-block-planning-system-production.up.railway.app/docs) · [Health Check](https://ibps-integrated-block-planning-system-production.up.railway.app/api/health)**
+**[Live Demo](https://frontend-seven-chi-40.vercel.app) · [API Docs](https://ibps-api-1d5z.onrender.com/docs) · [Health Check](https://ibps-api-1d5z.onrender.com/api/health)**
 
 </div>
 
@@ -37,9 +37,9 @@ The result: critical safety tasks frequently go unscheduled, track possessions o
 | Service | URL | Platform |
 |---|---|---|
 | **Frontend (React SPA)** | https://frontend-seven-chi-40.vercel.app | Vercel Edge CDN |
-| **Backend API** | https://ibps-integrated-block-planning-system-production.up.railway.app | Railway (Docker) |
-| **Swagger API Docs** | https://ibps-integrated-block-planning-system-production.up.railway.app/docs | FastAPI / OpenAPI |
-| **Health Check** | https://ibps-integrated-block-planning-system-production.up.railway.app/api/health | — |
+| **Backend API** | https://ibps-api-1d5z.onrender.com | Render (free web service) |
+| **Swagger API Docs** | https://ibps-api-1d5z.onrender.com/docs | FastAPI / OpenAPI |
+| **Health Check** | https://ibps-api-1d5z.onrender.com/api/health | — |
 
 ---
 
@@ -68,7 +68,7 @@ All numbers are computed on the 200-task, 72-block synthetic dataset in this rep
                            │  /api/* (HTTP proxy rewrite)
 ┌──────────────────────────▼──────────────────────────────────────┐
 │                      FastAPI Backend                             │
-│                    Railway · Docker · Python 3.11                │
+│                      Render · Python 3.11                        │
 │                                                                  │
 │  ┌───────────────┐  ┌──────────────────┐  ┌──────────────────┐ │
 │  │  Priority     │  │   CP-SAT         │  │  Metrics &       │ │
@@ -132,8 +132,9 @@ IBPS-Integrated-Block-Planning-System/
 │
 ├── docs/                           # Engineering specifications & contracts
 ├── deliverables/                   # SIH submission artifacts
-├── Dockerfile                      # Production Docker image (Railway)
-├── railway.json                    # Railway deployment configuration
+├── Dockerfile                      # Portable Docker image for the API
+├── render.yaml                     # Render Blueprint for the API
+├── .github/workflows/keep-alive.yml # Pings the Render API every 10 min
 ├── requirements.txt                # Python dependencies
 └── pytest.ini                      # Test configuration
 ```
@@ -252,7 +253,7 @@ Where $P_i$ = task priority score, $C$ = critical tasks, $e_j$ = extra departmen
 
 ## API Reference
 
-Full OpenAPI specification: [`/docs`](https://ibps-integrated-block-planning-system-production.up.railway.app/docs)
+Full OpenAPI specification: [`/docs`](https://ibps-api-1d5z.onrender.com/docs)
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -275,7 +276,7 @@ Full OpenAPI specification: [`/docs`](https://ibps-integrated-block-planning-sys
 
 ```bash
 curl -s -X POST \
-  https://ibps-integrated-block-planning-system-production.up.railway.app/api/plans/optimize \
+  https://ibps-api-1d5z.onrender.com/api/plans/optimize \
   -H "Content-Type: application/json" \
   -d '{"horizon": "WEEKLY", "objective_profile": "balanced"}' | python3 -m json.tool
 ```
@@ -315,28 +316,31 @@ ML enhances the *quality of inputs*. CP-SAT guarantees the *correctness and cons
 
 ## Deployment
 
-### Backend — Railway (Docker)
+### Backend — Render (free web service)
 
-The backend runs as a persistent Python 3.11 Docker container. This avoids the cold-start overheads and execution time limits of serverless functions — critical for CP-SAT solving on large instances.
+The API runs as a Python 3.11 web service on Render, defined by the Blueprint in [`render.yaml`](render.yaml):
 
-```bash
-npm i -g @railway/cli
-railway login
-railway up
-```
+- **Build:** `pip install -r requirements.txt`
+- **Start (from the repo root):** `uvicorn --app-dir backend app.main:app --host 0.0.0.0 --port $PORT`
+- **Health check:** `/api/health`
+- **Env:** `PYTHON_VERSION=3.11.9`; `CORS_ORIGINS` (comma-separated frontend origins) is entered in the Render dashboard
 
-Config: [`Dockerfile`](Dockerfile) · [`railway.json`](railway.json)
+To set it up: Render dashboard → **New → Blueprint** → select this repo → enter `CORS_ORIGINS` → **Apply**. Render redeploys on every push to `main`.
+
+Free instances sleep after about 15 minutes without traffic. The [`keep-alive`](.github/workflows/keep-alive.yml) GitHub Actions workflow pings `/api/health` every 10 minutes (and can be run manually) to avoid cold starts.
+
+The [`Dockerfile`](Dockerfile) remains as a portable option for any container host (`docker build -t ibps-api . && docker run -p 8000:8000 ibps-api`).
 
 ### Frontend — Vercel
 
-The frontend deploys as a pure static SPA on Vercel's Edge CDN. All `/api/*` requests are transparently proxied to the Railway backend.
+The frontend deploys as a static SPA on Vercel's Edge CDN. [`frontend/vercel.json`](frontend/vercel.json) rewrites all `/api/*` requests to the Render backend, so the browser only ever talks to the Vercel origin.
 
 ```bash
 cd frontend
 vercel --prod
 ```
 
-Config: [`frontend/vercel.json`](frontend/vercel.json)
+Leave `VITE_API_BASE_URL` **unset** in Vercel's environment variables: the app then calls `/api`, which the rewrite proxies to Render. Setting it would bypass the rewrite.
 
 ---
 
@@ -354,7 +358,7 @@ Config: [`frontend/vercel.json`](frontend/vercel.json)
 | **Charts** | Recharts |
 | **Routing** | React Router v7 |
 | **Testing** | pytest 8+ · httpx |
-| **Backend Hosting** | Railway (Docker) |
+| **Backend Hosting** | Render (free web service) |
 | **Frontend Hosting** | Vercel (Edge CDN) |
 
 ---
