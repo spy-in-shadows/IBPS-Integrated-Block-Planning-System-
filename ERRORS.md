@@ -50,7 +50,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Needs your call.* Either (a) add `python-docx` to `requirements.txt`, which also puts it in the Docker/Railway image, or (b) add a new `requirements-tools.txt` with `python-docx` and mention it in the README. I recommend (b).
 - **Verify:** Install, then import the script's modules. Then run `python tools/build_sih_project_report.py` with its output redirected to a scratch copy so `deliverables/` is not overwritten.
 
-### 3. `npm audit`: 2 high-severity advisories (vite 8.2.2, source-map-js ≤1.2.1)
+### ✅ 3. `npm audit`: 2 high-severity advisories (vite 8.2.2, source-map-js ≤1.2.1)
+- **Status:** ✅ Fixed: `npm audit fix` (no --force): vite 8.2.2→8.3.8, source-map-js 1.2.1→1.2.4, rolldown 1.2.6→1.2.19; 0 vulnerabilities; package.json unchanged.
 - **Severity:** warning (affects the dev server only, not the static production bundle)
 - **Where:** `frontend/package-lock.json`
 - **Evidence:** `npm audit` reports `vite 8.2.0 - 8.2.2` (GHSA-9jrq-w75r-8gcw, GHSA-rq7h-c2jc-7f22, GHSA-vfpm-58rq-9qcg, launch-editor advisories) and `source-map-js 1.0.0 - 1.2.1` (GHSA-68fv-2mgg-jv7q). "fix available via `npm audit fix`".
