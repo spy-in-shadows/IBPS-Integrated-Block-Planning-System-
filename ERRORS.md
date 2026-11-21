@@ -139,7 +139,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Put `...options` first and `headers: {...}` after it.
 - **Verify:** `tsc -b`, `npm run build`, and a smoke test of the dev server through the proxy.
 
-### 13. oxlint: unused catch binding
+### ✅ 13. oxlint: unused catch binding
+- **Status:** ✅ Fixed: `catch (_) {}` → `catch {}`; oxlint warnings 4 → 3.
 - **Severity:** warning
 - **Where:** `frontend/src/api/client.ts:26`
 - **Evidence:** `eslint(no-unused-vars): Catch parameter '_' is caught but never used.`

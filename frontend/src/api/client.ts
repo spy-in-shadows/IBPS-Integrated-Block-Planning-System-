@@ -23,7 +23,7 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     try {
       const err = await resp.json();
       msg = err?.error?.message ?? err?.detail ?? msg;
-    } catch (_) {}
+    } catch {}
     throw new ApiError(resp.status, msg);
   }
   return resp.json() as Promise<T>;
