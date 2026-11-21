@@ -167,7 +167,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** `plan_id: string;` → `plan_id?: string;`
 - **Verify:** `tsc -b` and `npm run build`, then re-run the cross-check.
 
-### 16. Deploy start commands are inconsistent, and Railway's start command is unverified
+### ✅ 16. Deploy start commands are inconsistent, and Railway's start command is unverified
+- **Status:** ✅ Fixed: Railway retired: deleted railway.json and Procfile; Dockerfile CMD kept as the portable option; Render start command defined once in render.yaml.
 - **Severity:** warning
 - **Where:** `railway.json:8`, `Procfile:1`, `Dockerfile:23`
 - **Evidence:** `railway.json` sets `startCommand: "cd backend && uvicorn ... --port $PORT"`, which overrides the Dockerfile `CMD` that already does the same thing through `sh -c`. Railway may run a Dockerfile-build start command without a shell, in which case `cd` and `$PORT` would not expand. I couldn't verify this because the Docker daemon isn't running, and the live deploy is reportedly healthy. Separately, `Procfile` uses `backend.app.main:app` while every other config uses `cd backend && app.main:app`. The Procfile form only works because of the `sys.path` hack in `backend/app/main.py:17-19`, and none of the configured platforms (Railway uses the Dockerfile, Render uses `startCommand`) reads the Procfile. Both forms returned 200 locally.
