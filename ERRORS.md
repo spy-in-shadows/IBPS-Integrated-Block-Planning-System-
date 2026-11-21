@@ -68,7 +68,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Comment out the `VITE_API_BASE_URL=` line in `frontend/.env.example` and add a note: leave it unset for local dev and Vercel, and set it only for a split-origin host such as the Render static site in `render.yaml`.
 - **Verify:** Build with the example's values loaded and confirm the bundle contains `` `/api` `` and no `onrender`. Then run the dev server and check that `/api/health` works through the proxy.
 
-### 5. Root `.env.example` defines `VITE_API_BASE_URL`, but Vite never reads it
+### ✅ 5. Root `.env.example` defines `VITE_API_BASE_URL`, but Vite never reads it
+- **Status:** ✅ Fixed: Replaced the unread VITE_API_BASE_URL block in root .env.example with a pointer to frontend/.env.example.
 - **Severity:** warning (dead config)
 - **Where:** `.env.example:14-16`
 - **Evidence:** The root `.env` contains `VITE_API_BASE_URL`, yet the built bundle still uses the `/api` fallback (scratch build A). Vite only loads `.env*` from its project root, `frontend/`, and `vite.config.ts` sets no `envDir`.
