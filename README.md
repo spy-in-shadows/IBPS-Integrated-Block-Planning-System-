@@ -12,8 +12,7 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-22%20passing-brightgreen?style=flat-square)](tests/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-35%20passing-brightgreen?style=flat-square)](tests/)
 
 **[Live Demo](https://frontend-seven-chi-40.vercel.app) · [API Docs](https://ibps-integrated-block-planning-system-production.up.railway.app/docs) · [Health Check](https://ibps-integrated-block-planning-system-production.up.railway.app/api/health)**
 
@@ -27,7 +26,7 @@ Indian Railways maintains over 68,000 km of track, overhead electrification, and
 
 The result: critical safety tasks frequently go unscheduled, track possessions overlap wastefully, and planners spend 3–5 hours per week on coordination that should be automated.
 
-**IBPS replaces this process** with a mathematically optimal, constraint-guaranteed scheduling engine built on Google OR-Tools CP-SAT — the same combinatorial AI solver used by Google Flights and large-scale logistics systems. A planning cycle that takes a human 3–5 hours runs in **under 25 milliseconds**, with a provable optimality guarantee.
+**IBPS replaces this process** with a mathematically optimal, constraint-guaranteed scheduling engine built on Google OR-Tools CP-SAT — the same combinatorial AI solver used by Google Flights and large-scale logistics systems. A planning cycle that takes a human 3–5 hours is solved to proven optimality in **about 10 milliseconds** on the 21-task demo fixture; on the 200-task synthetic dataset the solver returns its best feasible plan within its **30-second** time limit.
 
 > **Human-in-the-Loop Notice:** IBPS provides AI-assisted decision support. Final approval and override authority remain with authorized railway controllers and sectional engineers.
 
@@ -46,15 +45,15 @@ The result: critical safety tasks frequently go unscheduled, track possessions o
 
 ## Key Results
 
-All numbers are live outputs from the deployed system running on a 610-task, 112-block dataset, comparing the IBPS CP-SAT optimizer against a manual first-fit greedy baseline:
+All numbers are computed on the 200-task, 72-block synthetic dataset in this repo (`data/generated/full_dataset.json`), comparing the IBPS CP-SAT optimizer against a manual first-fit greedy baseline. Solver results at the time limit can vary slightly between machines:
 
 | Metric | Manual Baseline | IBPS Optimized | Improvement |
 |---|---|---|---|
-| Critical Safety Tasks Cleared | 28 | **35** | **+25%** |
-| Cross-Department Coordinated Blocks | 9 | **23** | **+155.6%** |
-| Average Block Utilization | 47.5% | **50.0%** | **+5.3%** |
-| Priority Score Fulfilled | 23.6% | **26.2%** | **+11.1%** |
-| Schedule Generation Time | 3–5 hours (human) | **21 ms (solver)** | **~850,000×** |
+| Critical Safety Tasks Cleared | 24 | **32** | **+33.3%** |
+| Cross-Department Coordinated Blocks | 16 | **36** | **+125.0%** |
+| Average Block Utilization | 89.6% | **98.6%** | **+10.1%** |
+| Priority Score Fulfilled | 67.5% | **83.4%** | **+23.6%** |
+| Schedule Generation Time | 3–5 hours (human) | **30 s (solver time limit)** | **~360–600×** |
 
 ---
 
@@ -117,17 +116,16 @@ IBPS-Integrated-Block-Planning-System/
 ├── frontend/                       # React 19 + Vite 8 + Tailwind v4 SPA
 │   ├── src/
 │   │   ├── components/             # UI components (dashboard, charts, tables)
-│   │   ├── pages/                  # Route-level views
 │   │   └── api/                    # Typed API client
 │   ├── vercel.json                 # Vercel deploy config + API proxy rewrite
 │   └── vite.config.ts
 │
 ├── data/
 │   ├── fixtures/demo_fixture.json  # 12-element deterministic demo dataset
-│   └── generated/full_dataset.json # 610-task synthetic evaluation dataset
+│   └── generated/full_dataset.json # 200-task synthetic evaluation dataset
 │
 ├── tests/
-│   ├── unit/                       # 22 unit tests: constraints, scoring, metrics
+│   ├── unit/                       # Unit tests: constraints, scoring, metrics
 │   ├── integration/                # End-to-end optimization tests
 │   ├── api/                        # HTTP endpoint tests
 │   └── conftest.py
@@ -147,7 +145,7 @@ IBPS-Integrated-Block-Planning-System/
 ### Prerequisites
 
 - Python 3.11+
-- Node.js 20+ and npm
+- Node.js 20.19+ or 22.12+ (required by Vite 8) and npm
 
 ### 1. Clone & Configure Environment
 
@@ -197,8 +195,11 @@ App available at **http://localhost:5173**
 # Verbose output
 .venv/bin/pytest -v
 
-# CLI audit benchmark (terminal output of a full optimization run)
+# CLI audit benchmark (terminal output of a full optimization run + solver diagnostics)
 .venv/bin/python backend/app/cli.py --audit
+
+# Rewrite data/*.json from the generator (otherwise only created when missing)
+.venv/bin/python backend/app/cli.py --regenerate
 ```
 
 The report generator in `tools/` needs one extra package that the API does not:
@@ -208,7 +209,7 @@ pip install -r requirements-tools.txt
 python tools/build_sih_project_report.py   # writes deliverables/*.docx
 ```
 
-**22 unit tests** covering:
+**35 tests** (unit, integration and API) covering:
 
 - CP-SAT hard constraints (corridor isolation, crew capacity, precedence, safety incompatibility)
 - Priority scoring engine (5-factor weighted formula)
@@ -276,7 +277,7 @@ Full OpenAPI specification: [`/docs`](https://ibps-integrated-block-planning-sys
 curl -s -X POST \
   https://ibps-integrated-block-planning-system-production.up.railway.app/api/plans/optimize \
   -H "Content-Type: application/json" \
-  -d '{"horizon": "WEEKLY", "enable_objective": true}' | python3 -m json.tool
+  -d '{"horizon": "WEEKLY", "objective_profile": "balanced"}' | python3 -m json.tool
 ```
 
 ---
@@ -355,12 +356,6 @@ Config: [`frontend/vercel.json`](frontend/vercel.json)
 | **Testing** | pytest 8+ · httpx |
 | **Backend Hosting** | Railway (Docker) |
 | **Frontend Hosting** | Vercel (Edge CDN) |
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 

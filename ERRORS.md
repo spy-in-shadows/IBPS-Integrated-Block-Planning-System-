@@ -175,7 +175,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Needs your approval (deployment).* Remove `deploy.startCommand` from `railway.json` so the Dockerfile `CMD` is the single source of truth, and either align the Procfile with the other configs or delete it.
 - **Verify:** Validate the JSON, and run `docker build` plus `docker run -e PORT=9000` with `/api/health` if Docker is available. Otherwise you'd need to confirm on a Railway deploy.
 
-### 17. README out of sync with the code
+### ✅ 17. README out of sync with the code
+- **Status:** ✅ Fixed: Removed LICENSE badge/section; metrics recomputed on the repo's 200-task/72-block dataset (solver hits 30 s limit → FEASIBLE, speed claim qualified); test count 35; removed pages/ line; curl body uses objective_profile; Node 20.19+/22.12+; documented --regenerate. Railway mentions handled by #16/migration.
 - **Severity:** warning (documentation)
 - **Where:** `README.md:15,130,204` (says 22 tests; actual 35), `:49,127` (says a 610-task/112-block dataset; `full_dataset.json` and the generator give 200 tasks/72 blocks), `:16,356` (links to `LICENSE`, which doesn't exist), `:120` (`frontend/src/pages/` doesn't exist), `:272` (curl example sends `enable_objective`, which the API ignores; the real field is `objective_profile`), `:150` ("Node.js 20+", but Vite 8 requires `^20.19.0 || >=22.12.0`).
 - **Root cause:** The README was rewritten without checking it against the code.
