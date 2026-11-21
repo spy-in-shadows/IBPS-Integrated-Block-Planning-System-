@@ -104,7 +104,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Use the literal `422` in both places, which works on every Starlette version. Status codes and response bodies stay the same.
 - **Verify:** `pytest -q` shows this warning gone, and `test_api_what_if_invalid_payload` still asserts 422.
 
-### 9. Test client warns that `httpx` with `starlette.testclient` is deprecated
+### 🚫 9. Test client warns that `httpx` with `starlette.testclient` is deprecated
+- **Status:** 🚫 Won't fix: Won't fix (per owner decision): would require swapping httpx for httpx2; tests pass.
 - **Severity:** warning
 - **Where:** comes from `fastapi/testclient.py:1`, triggered by `tests/api/test_api_endpoints.py`
 - **Evidence:** `StarletteDeprecationWarning: Using 'httpx' with 'starlette.testclient' is deprecated; install 'httpx2' instead.`
@@ -148,7 +149,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** `} catch (_) {}` → `} catch {}`, the optional catch binding valid for the ES2023 target.
 - **Verify:** `npx oxlint` no longer reports it, and `tsc -b` passes.
 
-### 14. oxlint: `useAsync` hook dependency warnings
+### 🚫 14. oxlint: `useAsync` hook dependency warnings
+- **Status:** 🚫 Won't fix: Won't fix (per owner decision): useAsync works correctly at runtime; no suppression or refactor added.
 - **Severity:** warning
 - **Where:** `frontend/src/App.tsx:83-92`
 - **Evidence:** `react-hooks(exhaustive-deps): ... dependency list that is not an array literal`, `... contains a call to setState`, and `react(set-state-in-effect)`.
@@ -180,7 +182,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Correct the verifiable facts: test count, `pages/` line, curl body, Node version. ⚠ *Your call:* whether to add a `LICENSE` file (a legal choice) or remove the badge and link, and whether the "610-task" headline metrics come from a dataset I can't see (live upload?) or should change to match the repo.
 - **Verify:** Diff review. Run the corrected curl body against the local server and expect 200.
 
-### 18. Build warning: main JS chunk is 674 kB (> 500 kB)
+### 🚫 18. Build warning: main JS chunk is 674 kB (> 500 kB)
+- **Status:** 🚫 Won't fix: Won't fix (per owner decision): code-splitting is a refactor outside this task.
 - **Severity:** warning
 - **Where:** `npm run build` output (`dist/assets/index-*.js 674.75 kB`)
 - **Root cause:** The whole SPA, including Recharts, ships as one chunk.
