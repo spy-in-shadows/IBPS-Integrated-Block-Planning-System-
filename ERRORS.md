@@ -59,7 +59,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Run `npm audit fix` (no `--force`). npm rewrites the lockfile with patch or minor bumps only, and no file is edited by hand. This changes the lockfile that Vercel/Render build from, so I'll confirm with you before committing.
 - **Verify:** `npm audit` reports 0 vulnerabilities. `git diff package.json` shows no major-version changes. Then `tsc -b`, `oxlint` and `npm run build` all pass.
 
-### 4. Following the README quick-start points the frontend at a placeholder host
+### ✅ 4. Following the README quick-start points the frontend at a placeholder host
+- **Status:** ✅ Fixed: Commented out the placeholder in frontend/.env.example and documented when to set it; a build using the copied example now bundles `/api`.
 - **Severity:** bug
 - **Where:** `frontend/.env.example:3`, `README.md:160`
 - **Evidence:** The README says `cp frontend/.env.example frontend/.env`. A build made with that value bakes `` `https://your-api.onrender.com/api` `` into the bundle (`vB=` and `NB=` in `assets/index-*.js`, scratch build B). That skips the Vite dev proxy, so every API call fails. Without the file, the bundle correctly uses `/api` (scratch build A).
