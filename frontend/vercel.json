@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://ibps-integrated-block-planning-system-production.up.railway.app/api/$1"
+      "destination": "https://ibps-api-1d5z.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
