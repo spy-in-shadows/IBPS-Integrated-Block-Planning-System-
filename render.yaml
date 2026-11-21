@@ -1,29 +1,17 @@
 services:
+  # FastAPI backend. The frontend is hosted on Vercel, which proxies /api/* here.
   - type: web
     name: ibps-api
     runtime: python
     region: singapore
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    # Runs from the repo root; --app-dir puts backend/ on the import path.
+    startCommand: uvicorn --app-dir backend app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
+      # Comma-separated allowed origins, e.g. https://your-app.vercel.app
       - key: CORS_ORIGINS
         sync: false
-
-  - type: web
-    name: ibps-web
-    runtime: static
-    buildCommand: cd frontend && npm ci && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: NODE_VERSION
-        value: 22.12.0
-      - key: VITE_API_BASE_URL
-        sync: false
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
