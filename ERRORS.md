@@ -30,7 +30,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 
 ## Entries (ordered: install/config first)
 
-### 1. `.gitignore` silently ignores source directories
+### ✅ 1. `.gitignore` silently ignores source directories
+- **Status:** ✅ Fixed: Anchored `build/`, `lib/`, `lib64/`, `public/` to repo root in .gitignore.
 - **Severity:** bug
 - **Where:** `.gitignore:22` (`build/`), `.gitignore:28` (`lib/`), `.gitignore:75` (`public/`)
 - **Evidence:** `git check-ignore -v --no-index` →
