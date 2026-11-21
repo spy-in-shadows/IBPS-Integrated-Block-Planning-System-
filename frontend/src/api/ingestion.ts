@@ -1,7 +1,7 @@
 import { apiFetch } from './client';
 import type { CleaningReportResponse, IngestCsvResponse, EmergencyTaskInput } from './types';
 
-const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
+const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export async function ingestCsv(payload: {
   tasks_csv: string;

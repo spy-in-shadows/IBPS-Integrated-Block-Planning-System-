@@ -86,7 +86,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Make `api_prefix` read `os.getenv("API_PREFIX", "/api")`, the same pattern as `HOST` and `PORT`. Behaviour is unchanged unless someone sets it. ⚠ For `DEBUG`, *your call*: leave it (harmless) or remove it from the example files and `render.yaml`. Removing it touches deploy config.
 - **Verify:** Run pytest. Start the server with `API_PREFIX=/v2` and check `/v2/health` → 200, then without it and check `/api/health` → 200.
 
-### 7. An empty `VITE_API_BASE_URL` drops the `/api` prefix
+### ✅ 7. An empty `VITE_API_BASE_URL` drops the `/api` prefix
+- **Status:** ✅ Fixed: `??` → `||` in client.ts and ingestion.ts; a build with an empty VITE_API_BASE_URL now bundles `/api`.
 - **Severity:** warning
 - **Where:** `frontend/src/api/client.ts:3`, `frontend/src/api/ingestion.ts:4`
 - **Evidence:** `import.meta.env.VITE_API_BASE_URL ?? '/api'`. `??` only falls back on `null` or `undefined`. A blank `VITE_API_BASE_URL=` (an easy state to reach after #4) gives `""`, so requests go to `/health`, `/tasks` and so on, which the SPA rewrite answers with `index.html`.

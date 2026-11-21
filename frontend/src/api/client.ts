@@ -1,6 +1,6 @@
 // API client — all fetch calls go through here
 
-const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api';
+const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export class ApiError extends Error {
   public status: number;
