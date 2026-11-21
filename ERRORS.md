@@ -156,7 +156,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Your call:* (a) leave as-is (my recommendation), (b) add one scoped `// oxlint-disable-next-line` with a justification comment, or (c) refactor the hook, which goes beyond the smallest-change rule.
 - **Verify:** (b) `npx oxlint` shows only the intended suppression.
 
-### 15. Frontend `PlanMetrics.plan_id` is declared required, but the API never sends it
+### ✅ 15. Frontend `PlanMetrics.plan_id` is declared required, but the API never sends it
+- **Status:** ✅ Fixed: `PlanMetrics.plan_id` made optional; cross-check now finds no required field missing from the backend.
 - **Severity:** warning
 - **Where:** `frontend/src/api/types.ts:179` vs `backend/app/domain/models.py:117-134`
 - **Evidence:** A schema cross-check of `PlanMetrics` reports `frontend expects but backend lacks: ['plan_id', ...]`. The other extra fields are already optional fallbacks. Nothing reads `metrics.plan_id`.

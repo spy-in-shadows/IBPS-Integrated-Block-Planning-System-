@@ -176,7 +176,7 @@ export interface BlockDetailResponse {
 
 // ─── Plans ──────────────────────────────────────────────────────────────────
 export interface PlanMetrics {
-  plan_id: string;
+  plan_id?: string;
   total_tasks: number;
   scheduled_tasks?: number;
   unscheduled_tasks?: number;
