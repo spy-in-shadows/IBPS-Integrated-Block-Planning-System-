@@ -130,7 +130,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** ⚠ *Your call (behaviour change):* only export when the files are missing (the loader's `load_*` functions already do this), or leave as-is. I recommend the "only when missing" option.
 - **Verify:** Run the CLI and check that `git status` is clean.
 
-### 12. `apiFetch` drops its default headers when a caller passes headers
+### ✅ 12. `apiFetch` drops its default headers when a caller passes headers
+- **Status:** ✅ Fixed: Spread `...options` before `headers` in apiFetch so caller headers merge with the JSON default.
 - **Severity:** warning (latent: no caller passes headers today)
 - **Where:** `frontend/src/api/client.ts:17-20`
 - **Evidence:** `{ headers: { 'Content-Type': ..., ...options?.headers }, ...options }`. The later `...options` overwrites the merged `headers` object whenever `options.headers` exists.
