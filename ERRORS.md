@@ -95,7 +95,8 @@ Raw check outputs saved outside the repo in the session scratchpad (`01_pip_inst
 - **Proposed fix:** Change `??` to `||` on both lines.
 - **Verify:** Build with `VITE_API_BASE_URL=` (empty) and confirm the bundle contains `` `/api` ``. Then `tsc -b` and `npm run build`.
 
-### 8. Deprecated Starlette constant in the 422 handler
+### ✅ 8. Deprecated Starlette constant in the 422 handler
+- **Status:** ✅ Fixed: Replaced the deprecated constant with literal `422` in errors.py; pytest warnings 2 → 1.
 - **Severity:** warning
 - **Where:** `backend/app/core/errors.py:35,38`
 - **Evidence:** pytest: `StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.`
